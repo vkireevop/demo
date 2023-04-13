@@ -3,6 +3,8 @@ package com.MyCrudApp.app.service;
 import com.MyCrudApp.app.models.User;
 import com.MyCrudApp.app.repository.UserRepository;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,6 +35,18 @@ public class UserServiceImpl implements UserService {
     public void update (long id,User userUpdated) {
         User user = findById(id);
         user.setName(userUpdated.getName());
+    }
+
+    @Override
+    public User findByUsername (String username) {
+        return rep.findByName(username);
+    }
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = rep.findByName(username);
+        return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),user.getAuthorities());
     }
 
     @Transactional
