@@ -3,24 +3,30 @@ package com.MyCrudApp.app.models;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 public class Role implements GrantedAuthority {
 
-    public long getRole_id() {
-        return role_id;
-    }
-
-    public void setRole_id(long role_id) {
-        this.role_id = role_id;
-    }
-
     @Id
-    private long role_id;
+    private long id;
 
     private String role;
 
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
+
     public Role() {
 
+    }
+
+    public long getRole_id() {
+        return id;
+    }
+
+    public void setRole_id(long role_id) {
+        this.id = role_id;
     }
 
     @Override

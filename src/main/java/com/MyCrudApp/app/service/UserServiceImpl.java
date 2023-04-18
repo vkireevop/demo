@@ -4,30 +4,30 @@ import com.MyCrudApp.app.models.User;
 import com.MyCrudApp.app.repository.UserRepository;
 
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
-    private final UserRepository rep;
+public class UserServiceImpl implements UserService, UserDetailsService {
+    private final UserRepository userRepository;
 
     public UserServiceImpl(UserRepository rep) {
-        this.rep = rep;
+        this.userRepository = rep;
     }
 
     @Transactional
     @Override
     public void save(User user){
-        rep.save(user);
+        userRepository.save(user);
     }
 
     @Override
     public User findById(long id) {
-        return rep.findById(id).get();
+        return userRepository.findById(id).get();
     }
 
     @Transactional
@@ -39,28 +39,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername (String username) {
-        return rep.findByName(username);
+        return userRepository.findByName(username);
     }
 
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = rep.findByName(username);
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),user.getAuthorities());
+        return userRepository.findByName(username);
     }
 
     @Transactional
     @Override
     public void delete (long id) {
-        rep.deleteById(id);
+        userRepository.deleteById(id);
     }
 
     @Override
     public List<User> getAllUsers() {
-        List<User> Users = new ArrayList<>();
-        for (User user  : rep.findAll()) {
-            Users.add(user);
-        }
-        return Users;
+        return userRepository.findAll();
     }
 }

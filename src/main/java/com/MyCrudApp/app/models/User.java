@@ -1,38 +1,50 @@
 package com.MyCrudApp.app.models;
 
-
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long user_id;
+    private long id;
 
+    @Column(unique = true)
     private String name;
 
     private String password;
+
+    private String surname;
+
+    private int age;
+
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+    public User () {
+
+    }
 
     public Collection<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
-    @ManyToMany
-    @JoinTable(name ="Role",
-                joinColumns = @JoinColumn(name = "user_id"),
-                inverseJoinColumns = @JoinColumn(name = "role_id"))
-
-    private Collection<Role> roles;
     public String getName() {
         return name;
     }
@@ -42,11 +54,15 @@ public class User implements UserDetails {
     }
 
     public long getId() {
-        return user_id;
+        return id;
     }
 
-    public User () {
+    public String getSurname() {
+        return surname;
+    }
 
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     @Override
@@ -60,30 +76,44 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRole())).collect(Collectors.toList());
+        return roles;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
+    @Override
     public String getUsername() {
         return name;
     }
 
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }
