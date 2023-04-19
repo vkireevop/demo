@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
     private final UserService us;
 
-    private final RoleServiceImpl rs;
+    private final RoleService rs;
     @Autowired
-    public AdminController(UserService us, RoleServiceImpl rs) {
+    public AdminController(UserService us, RoleService rs) {
         this.us = us;
         this.rs = rs;
     }
