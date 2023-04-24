@@ -1,0 +1,34 @@
+<div th:fragment="userInfo">
+    <h1>User information-page</h1>
+    <div class="card my-3">
+        <div class="card-header"><h5 class="mx-0 my-1">About user</h5></div>
+        <div class="card-body text-center">
+            <hr style="color: gray" class="my-1">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Role</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:utext="${admin.id}"></td>
+                    <td th:utext="${admin.name}"></td>
+                    <td th:utext="${admin.surname}"></td>
+                    <td th:utext="${admin.age}"></td>
+                    <td>
+                        <th:block
+                                th:each="role:${admin.getRoles()}"
+                                th:utext="${role.role}">Role
+                        </th:block>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
