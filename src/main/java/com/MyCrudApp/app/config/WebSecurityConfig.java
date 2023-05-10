@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setPasswordEncoder(getBcryptEncoder());
-        authenticationProvider.setUserDetailsService((UserDetailsService) userService);
+        authenticationProvider.setUserDetailsService(( userService);
         return authenticationProvider;
     }
 }
